@@ -1,0 +1,25 @@
+{
+  "name": "college-club-event-management",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Full-stack College Club Event Management platform (React + Vite + Express + Prisma + PostgreSQL)",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:migrate": "npm --prefix server run db:migrate",
+    "db:seed": "npm --prefix server run db:seed",
+    "db:reset": "npm --prefix server run db:reset",
+    "server": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "dev": "concurrently -n server,client -c cyan,magenta \"npm:server\" \"npm:client\"",
+    "build": "npm --prefix client run build",
+    "test:api": "npm --prefix server run test:api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

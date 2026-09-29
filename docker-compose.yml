@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ccems-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ccems
+      POSTGRES_PASSWORD: ccems_dev_password
+      POSTGRES_DB: ccems
+    ports:
+      - "5433:5432"
+    volumes:
+      - ccems_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ccems -d ccems"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  ccems_pgdata:

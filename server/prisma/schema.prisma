@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("admins")
+}
+
+model Event {
+  id                    Int          @id @default(autoincrement())
+  name                  String
+  category              String
+  description           String       @db.Text
+  date                  DateTime     @db.Date
+  time                  String
+  venue                 String
+  imageUrl              String?      @map("image_url")
+  registrationDeadline  DateTime     @map("registration_deadline")
+  capacity              Int          @default(100)
+  isFeatured            Boolean      @default(false) @map("is_featured")
+  createdAt             DateTime     @default(now()) @map("created_at")
+  updatedAt             DateTime     @updatedAt @map("updated_at")
+
+  registrations Registration[]
+
+  @@map("events")
+}
+
+model Registration {
+  id        Int      @id @default(autoincrement())
+  eventId   Int      @map("event_id")
+  name      String
+  email     String
+  college   String
+  year      String
+  phone     String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, email])
+  @@map("registrations")
+}
